@@ -6,128 +6,107 @@
 <div class="content-wrapper">
     <div class="page-header">
         <div class="header-wrapper">
-            <h1>Ajouter un Professeur</h1>
-            <a href="{{ route('professors.index') }}" class="btn-back">
-                <i class="fas fa-arrow-left"></i>
-                <span>Retour</span>
-            </a>
+            <div class="header-content">
+                <h1>Ajouter un Professeur</h1>
+                <p class="text-subtitle">Créez un nouveau compte professeur</p>
+            </div>
+            <div class="header-actions">
+                <a href="{{ route('professors.index') }}" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour à la liste
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="card">
-        <form action="{{ route('professors.store') }}" method="POST">
-            @csrf
-
-            <div class="form-group">
-                <label for="name">Nom Complet</label>
-                <div class="input-icon">
-                    <i class="fas fa-user"></i>
-                    <input type="text" 
-                           class="form-control @error('name') is-invalid @enderror" 
-                           id="name" 
-                           name="name" 
-                           value="{{ old('name') }}" 
-                           required>
-                </div>
-                @error('name')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <div class="input-icon">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" 
-                           class="form-control @error('email') is-invalid @enderror" 
-                           id="email" 
-                           name="email" 
-                           value="{{ old('email') }}" 
-                           required>
-                </div>
-                @error('email')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Téléphone</label>
-                <div class="input-icon">
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" 
-                           class="form-control @error('phone') is-invalid @enderror" 
-                           id="phone" 
-                           name="phone" 
-                           value="{{ old('phone') }}" 
-                           required>
-                </div>
-                @error('phone')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="specialty">Spécialité</label>
-                    <div class="input-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                        <select class="form-control @error('specialty') is-invalid @enderror" 
-                                id="specialty" 
-                                name="specialty" 
-                                required>
-                            <option value="">Sélectionnez une spécialité</option>
-                            <option value="Informatique">Informatique</option>
-                            <option value="Mathématiques">Mathématiques</option>
-                            <option value="Physique">Physique</option>
-                            <option value="Chimie">Chimie</option>
-                        </select>
+    <div class="content-card">
+        <div class="card-body">
+            <form action="{{ route('professors.store') }}" method="POST" class="create-form">
+                @csrf
+                
+                <div class="form-group">
+                    <label for="name">Nom complet</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user icon"></i>
+                        <input type="text" 
+                               id="name" 
+                               name="name" 
+                               class="form-control @error('name') is-invalid @enderror"
+                               value="{{ old('name') }}" 
+                               required>
                     </div>
-                    @error('specialty')
+                    @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="form-group col-md-6">
-                    <label for="type">Type</label>
-                    <div class="input-icon">
-                        <i class="fas fa-user-tag"></i>
-                        <select class="form-control @error('type') is-invalid @enderror" 
-                                id="type" 
-                                name="type" 
-                                required>
-                            <option value="">Sélectionnez un type</option>
-                            <option value="Permanent">Permanent</option>
-                            <option value="Vacataire">Vacataire</option>
-                        </select>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope icon"></i>
+                        <input type="email" 
+                               id="email" 
+                               name="email" 
+                               class="form-control @error('email') is-invalid @enderror"
+                               value="{{ old('email') }}" 
+                               required>
                     </div>
-                    @error('type')
+                    @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" 
-                           class="custom-control-input" 
-                           id="is_active" 
-                           name="is_active" 
-                           {{ old('is_active', true) ? 'checked' : '' }}>
-                    <label class="custom-control-label" for="is_active">Professeur actif</label>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               class="form-control @error('password') is-invalid @enderror"
+                               required>
+                    </div>
+                    @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
-            </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i>
-                    <span>Enregistrer</span>
-                </button>
-                <a href="{{ route('professors.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-times"></i>
-                    <span>Annuler</span>
-                </a>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label for="password_confirmation">Confirmer le mot de passe</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" 
+                               id="password_confirmation" 
+                               name="password_confirmation" 
+                               class="form-control"
+                               required>
+                    </div>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" 
+                               name="is_active" 
+                               id="is_active" 
+                               value="1" 
+                               {{ old('is_active', true) ? 'checked' : '' }}>
+                        <span class="checkmark"></span>
+                        Compte actif
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="btn-secondary">
+                        <i class="fas fa-undo"></i>
+                        Réinitialiser
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i>
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

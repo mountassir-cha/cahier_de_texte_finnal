@@ -10,6 +10,7 @@ use App\Models\Classe;
 use App\Models\CahierTexte;
 use App\Models\Subject;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Hash;
 
 class ProfessorController extends Controller
 {
@@ -271,5 +272,79 @@ class ProfessorController extends Controller
 
         return redirect()->route('professor.courses.index')
             ->with('success', 'Cours supprimé avec succès');
+    }
+
+    /**
+     * Affiche le formulaire de création d'un professeur
+     */
+    public function create()
+    {
+        return view('professors.create');
+    }
+
+    /**
+     * Enregistre un nouveau professeur
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:professors,email',
+            'password' => 'required|min:8|confirmed',
+            'is_active' => 'boolean'
+        ]);
+
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['is_active'] = $request->has('is_active');
+
+        Professor::create($validated);
+
+        return redirect()->route('professors.index')
+            ->with('success', 'Professeur créé avec succès');
+    }
+
+    /**
+     * Affiche le formulaire d'édition d'un professeur
+     */
+    public function edit(Professor $professor)
+    {
+        return view('professors.edit', compact('professor'));
+    }
+
+    /**
+     * Met à jour un professeur
+     */
+    public function update(Request $request, Professor $professor)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:professors,email,' . $professor->id,
+            'password' => 'nullable|min:8|confirmed',
+            'is_active' => 'boolean'
+        ]);
+
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $validated['is_active'] = $request->has('is_active');
+
+        $professor->update($validated);
+
+        return redirect()->route('professors.index')
+            ->with('success', 'Professeur mis à jour avec succès');
+    }
+
+    /**
+     * Supprime un professeur
+     */
+    public function destroy(Professor $professor)
+    {
+        $professor->delete();
+
+        return redirect()->route('professors.index')
+            ->with('success', 'Professeur supprimé avec succès');
     }
 } 

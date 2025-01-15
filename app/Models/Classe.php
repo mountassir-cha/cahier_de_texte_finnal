@@ -12,12 +12,13 @@ class Classe extends Model
     protected $fillable = [
         'name',
         'level',
-        'description',
+        'capacity',
         'is_active'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'capacity' => 'integer'
     ];
 
     public function courses()

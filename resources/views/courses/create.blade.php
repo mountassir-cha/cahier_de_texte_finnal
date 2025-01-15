@@ -10,17 +10,20 @@
     </div>
 
     <div class="card">
-        <form action="{{ route('courses.store') }}" method="POST">
+        <form action="{{ route('courses.store') }}" method="POST" class="create-form">
             @csrf
-
+            
             <div class="form-group">
-                <label for="title">Titre</label>
-                <input type="text" 
-                       class="form-control @error('title') is-invalid @enderror" 
-                       id="title" 
-                       name="title" 
-                       value="{{ old('title') }}" 
-                       required>
+                <label for="title">Titre du cours</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-book icon"></i>
+                    <input type="text" 
+                           id="title" 
+                           name="title" 
+                           class="form-control @error('title') is-invalid @enderror"
+                           value="{{ old('title') }}" 
+                           required>
+                </div>
                 @error('title')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -28,37 +31,45 @@
 
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="professor_id">Professeur</label>
-                    <select class="form-control @error('professor_id') is-invalid @enderror" 
-                            id="professor_id" 
-                            name="professor_id" 
-                            required>
-                        <option value="">Sélectionnez un professeur</option>
-                        @foreach($professors as $professor)
-                            <option value="{{ $professor->id }}" {{ old('professor_id') == $professor->id ? 'selected' : '' }}>
-                                {{ $professor->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('professor_id')
+                    <label for="subject_id">Matière</label>
+                    <div class="select-wrapper">
+                        <i class="fas fa-graduation-cap icon"></i>
+                        <select name="subject_id" 
+                                id="subject_id" 
+                                class="form-control @error('subject_id') is-invalid @enderror" 
+                                required>
+                            <option value="">Sélectionnez une matière</option>
+                            @foreach($subjects as $subject)
+                                <option value="{{ $subject->id }}" {{ old('subject_id') == $subject->id ? 'selected' : '' }}>
+                                    {{ $subject->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    @error('subject_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label for="subject_id">Matière</label>
-                    <select class="form-control @error('subject_id') is-invalid @enderror" 
-                            id="subject_id" 
-                            name="subject_id" 
-                            required>
-                        <option value="">Sélectionnez une matière</option>
-                        @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}" {{ old('subject_id') == $subject->id ? 'selected' : '' }}>
-                                {{ $subject->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('subject_id')
+                    <label for="class_id">Classe</label>
+                    <div class="select-wrapper">
+                        <i class="fas fa-users icon"></i>
+                        <select name="class_id" 
+                                id="class_id" 
+                                class="form-control @error('class_id') is-invalid @enderror" 
+                                required>
+                            <option value="">Sélectionnez une classe</option>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>
+                                    {{ $class->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    @error('class_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -66,65 +77,51 @@
 
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="classe_id">Classe</label>
-                    <select class="form-control @error('classe_id') is-invalid @enderror" 
-                            id="classe_id" 
-                            name="classe_id" 
-                            required>
-                        <option value="">Sélectionnez une classe</option>
-                        @foreach($classes as $class)
-                            <option value="{{ $class->id }}" {{ old('classe_id') == $class->id ? 'selected' : '' }}>
-                                {{ $class->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('classe_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
                     <label for="semester">Semestre</label>
-                    <select class="form-control @error('semester') is-invalid @enderror" 
-                            id="semester" 
-                            name="semester" 
-                            required>
-                        <option value="1" {{ old('semester') == 1 ? 'selected' : '' }}>Semestre 1</option>
-                        <option value="2" {{ old('semester') == 2 ? 'selected' : '' }}>Semestre 2</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <i class="fas fa-calendar icon"></i>
+                        <select name="semester" 
+                                id="semester" 
+                                class="form-control @error('semester') is-invalid @enderror" 
+                                required>
+                            <option value="">Sélectionnez un semestre</option>
+                            <option value="S1" {{ old('semester') == 'S1' ? 'selected' : '' }}>S1</option>
+                            <option value="S2" {{ old('semester') == 'S2' ? 'selected' : '' }}>S2</option>
+                        </select>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
                     @error('semester')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="form-group col-md-3">
-                    <label for="hours">Heures</label>
-                    <input type="number" 
-                           class="form-control @error('hours') is-invalid @enderror" 
-                           id="hours" 
-                           name="hours" 
-                           value="{{ old('hours') }}" 
-                           required>
+                <div class="form-group col-md-6">
+                    <label for="hours">Nombre d'heures</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-clock icon"></i>
+                        <input type="number" 
+                               id="hours" 
+                               name="hours" 
+                               class="form-control @error('hours') is-invalid @enderror"
+                               value="{{ old('hours') }}" 
+                               min="1"
+                               required>
+                    </div>
                     @error('hours')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" 
-                           class="custom-control-input" 
-                           id="is_active" 
-                           name="is_active" 
-                           {{ old('is_active', true) ? 'checked' : '' }}>
-                    <label class="custom-control-label" for="is_active">Cours actif</label>
-                </div>
-            </div>
-
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-                <a href="{{ route('courses.index') }}" class="btn btn-secondary">Annuler</a>
+                <button type="reset" class="btn-secondary">
+                    <i class="fas fa-undo"></i>
+                    Réinitialiser
+                </button>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i>
+                    Enregistrer
+                </button>
             </div>
         </form>
     </div>

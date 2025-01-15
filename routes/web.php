@@ -58,9 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/professors/update/{id}', [ProfessorController::class, 'update'])->name('professors.update');
     Route::delete('/professors/delete/{id}', [ProfessorController::class, 'destroy'])->name('professors.destroy');
     Route::resource('subjects', SubjectController::class);
-    Route::resources([
-        'courses' => CourseController::class,
-    ]);
+    Route::resource('courses', CourseController::class);
     
     Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password');

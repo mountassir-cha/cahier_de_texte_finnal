@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\Professor;
 use App\Models\Subject;
 use App\Models\Classe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -18,64 +18,58 @@ class CourseController extends Controller
 
     public function create()
     {
-        $professors = Professor::where('is_active', true)->get();
         $subjects = Subject::where('is_active', true)->get();
         $classes = Classe::where('is_active', true)->get();
-        return view('courses.create', compact('professors', 'subjects', 'classes'));
+        return view('courses.create', compact('subjects', 'classes'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'professor_id' => 'required|exists:professors,id',
             'subject_id' => 'required|exists:subjects,id',
-            'classe_id' => 'required|exists:classes,id',
-            'semester' => 'required|integer|min:1|max:2',
+            'class_id' => 'required|exists:classes,id',
+            'semester' => 'required|string',
             'hours' => 'required|integer|min:1',
-            'is_active' => 'boolean'
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
+        // Utiliser l'ID du professeur connecté via le guard professor
+        $validated['professor_id'] = Auth::guard('professor')->id();
+        $validated['is_active'] = true;
 
         Course::create($validated);
 
-        return redirect()->route('courses.index')
-            ->with('success', 'Cours créé avec succès.');
+        return redirect()->route('professor.courses.index')
+            ->with('success', 'Cours créé avec succès');
     }
 
     public function edit(Course $course)
     {
-        $professors = Professor::where('is_active', true)->get();
         $subjects = Subject::where('is_active', true)->get();
         $classes = Classe::where('is_active', true)->get();
-        return view('courses.edit', compact('course', 'professors', 'subjects', 'classes'));
+        return view('courses.edit', compact('course', 'subjects', 'classes'));
     }
 
     public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'professor_id' => 'required|exists:professors,id',
             'subject_id' => 'required|exists:subjects,id',
-            'classe_id' => 'required|exists:classes,id',
-            'semester' => 'required|string|max:255',
+            'class_id' => 'required|exists:classes,id',
+            'semester' => 'required|string',
             'hours' => 'required|integer|min:1',
-            'is_active' => 'boolean'
         ]);
 
         $course->update($validated);
 
         return redirect()->route('courses.index')
-            ->with('success', 'Cours mis à jour avec succès.');
+            ->with('success', 'Cours mis à jour avec succès');
     }
 
     public function destroy(Course $course)
     {
         $course->delete();
-
         return redirect()->route('courses.index')
-            ->with('success', 'Cours supprimé avec succès.');
+            ->with('success', 'Cours supprimé avec succès');
     }
 } 

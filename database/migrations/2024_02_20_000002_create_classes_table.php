@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('level');
-            $table->integer('capacity');
+            $table->integer('capacity')->default(30);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

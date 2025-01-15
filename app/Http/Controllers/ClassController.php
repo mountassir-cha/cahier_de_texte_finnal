@@ -27,17 +27,15 @@ class ClassController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'level' => 'required|string|max:255',
+            'level' => 'required|string',
             'capacity' => 'required|integer|min:1',
             'is_active' => 'boolean'
         ]);
 
-        $validated['is_active'] = $request->has('is_active');
-
-        Classe::create($validated);
+        $classe = Classe::create($validated);
 
         return redirect()->route('classes.index')
-            ->with('success', 'Classe créée avec succès.');
+            ->with('success', 'Classe créée avec succès');
     }
 
     public function edit($id)
